@@ -10,6 +10,8 @@ RUN tar -xvzf ccs.tar.gz && \
 
 RUN ./CCS/ccs_setup.run --mode unattended --prefix /opt
 
+RUN chmod -R 777 /opt/ccs
+
 ADD run.sh /run.sh
 
 RUN chmod +x /run.sh
