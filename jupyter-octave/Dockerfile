@@ -1,12 +1,13 @@
 FROM debian:buster-slim
 
-RUN apt-get update && apt-get install -y python3 python3-pip gnuplot octave libffi-dev liboctave-dev
+RUN apt-get update && apt-get install -y python3 python3-pip gnuplot octave \
+    libffi-dev liboctave-dev
 
 RUN pip3 install jupyter octave_kernel sympy==1.5.1
 
-RUN octave --eval "pkg install -forge symbolic"
-
-RUN octave --eval "pkg install -forge control"
+RUN octave --eval "pkg install -forge symbolic" && \
+    octave --eval "pkg install -forge control" && \
+    octave --eval "pkg install -forge signal"
 
 RUN mkdir -p /home/runtime/ /notebooks/ && chmod 777 /home/runtime/ /notebooks/ 
 
