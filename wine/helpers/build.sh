@@ -7,4 +7,4 @@ fi
 
 cd "$(dirname "$(dirname "$0")")"
 
-docker build -t labview-2020 .
+docker build -t wine .

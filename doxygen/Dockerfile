@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 
-RUN apt-get update && apt-get install -y doxygen
+RUN apt-get update && apt-get install -y doxygen graphviz
 
 ADD run.sh /run.sh
 
