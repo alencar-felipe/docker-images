@@ -1,0 +1,13 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    container: alencarfelipe/build
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v2
