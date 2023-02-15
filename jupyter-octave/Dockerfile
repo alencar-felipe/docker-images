@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye
 
 RUN apt-get update && apt-get install -y python3 python3-pip gnuplot octave \
     libffi-dev liboctave-dev

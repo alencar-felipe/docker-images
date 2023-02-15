@@ -1,17 +1,20 @@
+import os
 import docker
 import yaml
 
 from pathlib import Path
 
-HUB_USER = 'alencarfelipe'
+PUSH_EN = bool(os.environ['PUSH_EN'])
+HUB_USER = os.environ['HUB_USER']
+HUB_PASS = os.environ['HUB_PASS']
 DOCKER_URL = 'unix://var/run/docker.sock'
-ROOT = Path('/')
-IMAGES = ROOT / 'docker-images'
+IMAGES = Path('/__w/docker-images/docker-images')
 BUILD_YAML = IMAGES / 'build.yaml'
 IMAGE_YAML = 'image.yaml'
 
 def main():
     client = docker.DockerClient(base_url=DOCKER_URL)
+    client.login(username=HUB_USER, password=HUB_PASS)
 
     build_conf = load_yaml(BUILD_YAML)
     
@@ -38,21 +41,29 @@ def main():
                 failed = True
                 continue
             
-            try:
-                client.images.push(
-                    repository=repository,
-                    tag=tag    
-                )
-            except:
-                print('Push Error')
-                failed = True
-                continue
+            if PUSH_EN:
+                try:   
+                    resp = client.api.push(
+                        repository=repository,
+                        tag=tag,
+                        stream=True,
+                        decode=True    
+                    )
+
+                    for line in resp:
+                        if 'errorDetail' in line:
+                            raise Exception(str(line))
+
+                except:
+                    print('Push Error')
+                    failed = True
+                    continue
 
             print('Ok')
 
     if failed :
         exit(-1)
-        
+
 def load_yaml(path):
     with open(path, "r") as f:
         return yaml.safe_load(f)

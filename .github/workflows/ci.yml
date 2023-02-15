@@ -4,10 +4,22 @@ on:
     branches:
       - master
 
+  schedule:
+    - cron: "0 0 1 * *"
+
 jobs:
-  ci:
+  CI:
     runs-on: ubuntu-latest
-    container: alencarfelipe/build
+    container: 
+      image: alencarfelipe/build
+      env:
+        PUSH_EN: "True"
+        HUB_USER: ${{ secrets.HUB_USER }}
+        HUB_PASS: ${{ secrets.HUB_PASS }}
+
     steps:
       - name: Checkout master branch
         uses: actions/checkout@v2
+
+      - name: Build Images
+        run: pwd && python /app/main.py
