@@ -1,0 +1,7 @@
+{
+    "latest":{},
+    "10.3-2021.10-bullseye": {
+        "BASE_IMAGE":"debian:bullseye",
+        "GNU_RM_VER":"10.3-2021.10"
+    }
+}
