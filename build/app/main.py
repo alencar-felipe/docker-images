@@ -15,6 +15,8 @@ def main():
 
     build_conf = load_yaml(BUILD_YAML)
     
+    failed = False
+
     for image_name in build_conf['images']:
         image_conf = load_yaml(IMAGES / image_name / IMAGE_YAML)
         
@@ -33,6 +35,7 @@ def main():
                 )
             except:
                 print('Build Error')
+                failed = True
                 continue
             
             try:
@@ -42,10 +45,14 @@ def main():
                 )
             except:
                 print('Push Error')
+                failed = True
                 continue
 
             print('Ok')
 
+    if failed :
+        exit(-1)
+        
 def load_yaml(path):
     with open(path, "r") as f:
         return yaml.safe_load(f)
