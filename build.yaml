@@ -1,0 +1,9 @@
+images:
+  - build
+  - doxygen
+  - freecad
+  - gnu-arm-embedded-toolchain
+  - jupyter-octave
+  - my-latex
+  - stm32-dev
+  - wine

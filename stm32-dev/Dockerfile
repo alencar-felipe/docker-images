@@ -1,6 +1,6 @@
 ARG GNU_RM_VER=10.3-2021.10
 
-FROM alencarfelipe/gnu-arm-embedded-toolchain:${GNU_RM_VER}-bullseye-slim
+FROM alencarfelipe/gnu-arm-embedded-toolchain:${GNU_RM_VER}-bullseye
 
 # Other Tools =================================================================#
 
