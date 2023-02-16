@@ -14,8 +14,9 @@ jobs:
       image: alencarfelipe/build
       env:
         PUSH_EN: "True"
-        HUB_USER: ${{ secrets.HUB_USER }}
+        HUB_USER: alencarfelipe
         HUB_PASS: ${{ secrets.HUB_PASS }}
+        IMAGES_PATH: /__w/docker-images/docker-images
 
     steps:
       - name: Checkout master branch
