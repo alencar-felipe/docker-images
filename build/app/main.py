@@ -1,5 +1,6 @@
 import os
 import docker
+import sys
 import yaml
 
 from pathlib import Path
@@ -24,7 +25,12 @@ def main():
     
     failed = False
 
-    for image_name in build_conf['images']:
+    if len(sys.argv) > 1:
+        image_names = sys.argv[1:]
+    else:
+        image_names = build_conf['images']
+
+    for image_name in image_names:
         image_conf = load_yaml(IMAGES_PATH / image_name / IMAGE_YAML)
         
         for tag, args in image_conf['tags'].items():
