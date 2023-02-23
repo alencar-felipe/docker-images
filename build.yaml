@@ -3,6 +3,7 @@ images:
   - doxygen
   - freecad
   - gnu-arm-embedded-toolchain
+  - gnuradio
   - jupyter-octave
   - my-latex
   - stm32-dev
