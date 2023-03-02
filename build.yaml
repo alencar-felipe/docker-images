@@ -4,8 +4,8 @@ images:
   - freecad
   - gnu-arm-embedded-toolchain
   - gnuradio
-  - jupyter-lcapy
   - jupyter-octave
+  - my-jupyter
   - my-latex
   - stm32-dev
   - wine

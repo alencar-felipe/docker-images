@@ -12,4 +12,6 @@ RUN apt-get update && \
 
 USER jovyan
 
-RUN pip3 install lcapy==1.12
+RUN pip3 install \
+    lcapy==1.12 \
+    deap==1.3.3 
