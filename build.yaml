@@ -5,6 +5,7 @@ images:
   - gnu-arm-embedded-toolchain
   - gnuradio
   - jupyter-octave
+  - mea-cia3
   - my-jupyter
   - my-latex
   - stm32-dev
