@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bullseye
 
 RUN dpkg --add-architecture i386
 
@@ -13,3 +13,4 @@ RUN curl -L https://dl.winehq.org/wine-builds/Release.key | apt-key add - && \
     
 RUN apt-get update && apt-get install -y winehq-stable fonts-wine
 
+WORKDIR /work

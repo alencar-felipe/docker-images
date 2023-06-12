@@ -18,6 +18,8 @@ RUN apt-get update && \
         libgtk-3-dev \
         gnuradio \
         gqrx-sdr \
+        libsndfile1-dev \
+        gdb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -41,6 +43,28 @@ RUN git clone https://github.com/analogdevicesinc/libad9361-iio.git && \
     make install && \
     cd ../.. && \
     rm -rf libad9361-iio
+
+RUN git clone --branch maint-3.10 https://github.com/bastibl/gr-foo.git && \
+    cd gr-foo && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install && \
+    ldconfig && \
+    cd ../.. && \
+    rm -rf gr-foo
+
+RUN git clone --branch maint-3.10 https://github.com/bastibl/gr-ieee802-15-4.git && \
+    cd gr-ieee802-15-4 && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install && \
+    ldconfig && \
+    cd ../.. && \
+    rm -rf gr-ieee802-15-4
 
 USER jovyan
 

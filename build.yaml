@@ -6,7 +6,9 @@ images:
   - gnuradio
   - jupyter-octave
   - mea-cia3
+  - mea-project-s8
   - my-jupyter
   - my-latex
+  - riscv-gnu-toolchain
   - stm32-dev
   - wine

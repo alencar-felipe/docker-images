@@ -7,4 +7,4 @@ docker run -it --rm \
 -v $(pwd):/home/jovyan/work \
 -e DISPLAY=$DISPLAY \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
-alencarfelipe/mea-projet-s8 $@
+alencarfelipe/mea-project-s8 $@
