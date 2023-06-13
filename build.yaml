@@ -11,4 +11,4 @@ images:
   - my-latex
   - riscv-gnu-toolchain
   - stm32-dev
-  - wine
+#  - wine

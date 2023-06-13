@@ -1,5 +1,4 @@
 ARG BASE_IMAGE="debian:bullseye"
-ARG COMMIT="663b3852189acae826d99237cef45e629dfd6471"
 
 FROM $BASE_IMAGE
 
@@ -13,10 +12,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/riscv/riscv-gnu-toolchain \
     /riscv-gnu-toolchain && \
-    cd /riscv-gnu-toolchain && \
-    git checkout $COMMIT
-
+    cd /riscv-gnu-toolchain
+    
 WORKDIR /riscv-gnu-toolchain
+
+ARG COMMIT="663b3852189acae826d99237cef45e629dfd6471"
+
+RUN git checkout $COMMIT
 
 RUN ./configure --prefix=/opt/riscv \
     --disable-linux \
@@ -30,6 +32,6 @@ RUN ./configure --prefix=/opt/riscv \
 
 RUN rm -rf /riscv-gnu-toolchain
 
-ENV PATH="/opt/riscv:${PATH}"
+ENV PATH="/opt/riscv/bin:${PATH}"
 
 WORKDIR /work
