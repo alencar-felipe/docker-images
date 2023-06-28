@@ -9,6 +9,7 @@ images:
   - mea-project-s8
   - my-jupyter
   - my-latex
+  - riscv-dev
   - riscv-gnu-toolchain
   - stm32-dev
 #  - wine
