@@ -1,8 +1,11 @@
 tags:
-    latest:
-        BASE_IMAGE: debian:bullseye
-        GNU_RM_VER: 10.3-2021.10
+  latest:
+    VERSION: 10.3-2021.10
 
-    10.3-2021.10:
-        BASE_IMAGE: debian:bullseye
-        GNU_RM_VER: 10.3-2021.10
+  10.3-2021.10:
+    VERSION: 10.3-2021.10
+
+  4_9-2015q3:
+    VERSION: 4_9-2015q3
+    URL: https://launchpadlibrarian.net/218827486/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2
+
