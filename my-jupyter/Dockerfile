@@ -10,8 +10,11 @@ RUN apt-get update && \
         build-essential \
         python3-dev \
         libcairo2-dev \
-        libpango1.0-dev \ 
+        libpango1.0-dev \
         ffmpeg \
+        libsm6 \
+        libxext6 \
+        libxrender-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -20,4 +23,5 @@ USER jovyan
 RUN pip3 install \
     lcapy==1.12 \
     deap==1.3.3 \
-    manim==0.17.2 
+    manim==0.17.2 \
+    opencv-python-headless==4.8.0.74

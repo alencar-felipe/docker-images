@@ -1,5 +1,0 @@
-tags:
-    latest:
-        BASE_IMAGE: "debian:bullseye"
-        COMMIT: "663b3852189acae826d99237cef45e629dfd6471"
-        

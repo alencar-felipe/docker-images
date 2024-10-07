@@ -1,10 +1,8 @@
-ARG BASE_IMAGE
-
-FROM $BASE_IMAGE
+FROM debian:12
 
 RUN apt-get update && apt-get install -y wget bzip2
 
-ARG GNU_RM_VER
+ARG GNU_RM_VER=10.3-2021.10
 
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/\
 ${GNU_RM_VER}/gcc-arm-none-eabi-${GNU_RM_VER}-x86_64-linux.tar.bz2 \

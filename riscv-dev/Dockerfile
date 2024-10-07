@@ -9,6 +9,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN pip install --no-cache-dir \
     Jinja2==3.1.2 \
+    pyelftools==0.29 \
     pyserial==3.5 \
     tqdm==4.64.0
     
