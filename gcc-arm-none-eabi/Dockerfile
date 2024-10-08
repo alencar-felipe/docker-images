@@ -10,5 +10,6 @@ RUN wget ${URL} -O gcc-arm-none-eabi.tar.bz2
 RUN tar xjf gcc-arm-none-eabi.tar.bz2 -C /usr/share/ && \
     rm gcc-arm-none-eabi.tar.bz2
 
-RUN echo "PATH=/usr/share/gcc-arm-none-eabi-${VERSION}/bin/:${PATH}" \
-    >> /etc/profile
+ENV GCC_ARM_ROOT=/usr/share/gcc-arm-none-eabi-${VERSION}
+
+RUN echo "PATH=${GCC_ARM_ROOT}/bin/:${PATH}" >> /etc/profile

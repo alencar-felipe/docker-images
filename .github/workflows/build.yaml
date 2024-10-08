@@ -50,8 +50,8 @@ jobs:
         ${DOCKERHUB_USERNAME}/gcc-arm-none-eabi:10.3-2021.10           -t ${DOCKERHUB_USERNAME}/gcc-arm-none-eabi:10.3-2021.10-${GIT_HASH}           ./gcc-arm-none-eabi
 
         '
-  gcc-arm-none-eabi-4_9-2015q3:
-    name: gcc-arm-none-eabi-4_9-2015q3
+  gcc-arm-none-eabi-9-2019-q4-major:
+    name: gcc-arm-none-eabi-9-2019-q4-major
     runs-on: ubuntu-latest
     env:
       DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
@@ -68,11 +68,35 @@ jobs:
     - name: Build and push image
       run: 'GIT_HASH=$(git rev-parse --short HEAD)
 
-        docker buildx build --push           --build-arg VERSION="4_9-2015q3" --build-arg
-        URL="https://launchpadlibrarian.net/218827486/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2"            -t
-        ${DOCKERHUB_USERNAME}/gcc-arm-none-eabi:4_9-2015q3           -t ${DOCKERHUB_USERNAME}/gcc-arm-none-eabi:4_9-2015q3-${GIT_HASH}           ./gcc-arm-none-eabi
+        docker buildx build --push           --build-arg VERSION="9-2019-q4-major"
+        --build-arg URL="https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2"            -t
+        ${DOCKERHUB_USERNAME}/gcc-arm-none-eabi:9-2019-q4-major           -t ${DOCKERHUB_USERNAME}/gcc-arm-none-eabi:9-2019-q4-major-${GIT_HASH}           ./gcc-arm-none-eabi
 
         '
+  nrf5-dev-latest:
+    name: nrf5-dev-latest
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push image
+      run: 'GIT_HASH=$(git rev-parse --short HEAD)
+
+        docker buildx build --push                      -t ${DOCKERHUB_USERNAME}/nrf5-dev:latest           -t
+        ${DOCKERHUB_USERNAME}/nrf5-dev:latest-${GIT_HASH}           ./nrf5-dev
+
+        '
+    needs:
+    - gcc-arm-none-eabi-9-2019-q4-major
   stm32-dev-latest:
     name: stm32-dev-latest
     runs-on: ubuntu-latest
