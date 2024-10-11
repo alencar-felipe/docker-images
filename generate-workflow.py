@@ -37,13 +37,7 @@ steps:
       password: ${{{{ secrets.DOCKERHUB_PASSWORD }}}}
 
   - name: Build and push image
-    run: |
-        GIT_HASH=$(git rev-parse --short HEAD)
-        docker buildx build --push \
-          {args} \
-          -t ${{DOCKERHUB_USERNAME}}/{image_name}:{image_tag} \
-          -t ${{DOCKERHUB_USERNAME}}/{image_name}:{image_tag}-${{GIT_HASH}} \
-          ./{image_name}
+    run: docker buildx build --push {args}
 
 """
 
@@ -78,20 +72,23 @@ def image_jobs(image_name: str) -> dict:
     with open(index_path, "r") as file:
       index = yaml.safe_load(file)
 
-  tags: dict[str] = index.get("tags", {"latest": []})
-  needs: list[str] = index.get("needs", [])
+  latest: str = index.get("latest")
+  tags: dict[str, dict[str, str]] = index.get("tags") or {"latest": {}}
+  needs: list[str] = index.get("needs") or []
 
   jobs = {}
-  for tag, args in tags.items():
+  for tag, build_args in tags.items():
 
     job_name = get_job_name(image_name, tag)
 
-    job = yaml.safe_load(JOB_TEMPLATE.format(
-      job_name=job_name,
-      image_name=image_name,
-      image_tag=tag,
-      args=args_fmt(args)
-    ))
+    args = f"-t ${{DOCKERHUB_USERNAME}}/{image_name}:{tag} "
+    if tag == latest:
+      args += f"-t ${{DOCKERHUB_USERNAME}}/{image_name}:latest "
+    for key, value in build_args.items():
+      args += f"--build-arg {key}=\"{value}\" "
+    args += f"{str(image_path.relative_to(ROOT_PATH))} "
+
+    job = yaml.safe_load(JOB_TEMPLATE.format(job_name=job_name, args=args))
 
     if needs:
       job["needs"] = [get_job_name(need) for need in needs]
@@ -101,21 +98,12 @@ def image_jobs(image_name: str) -> dict:
   return jobs
 
 
-def args_fmt(args: dict) -> str:
-  if not args:
-    return ""
-
-  return "".join(
-      f"--build-arg {key}=\"{value}\" "
-      for key, value in args.items()
-  )
-
-def get_job_name(text, tag="latest"):
-  if ":" not in text:
-    text = f"{text}:{tag}"
+def get_job_name(image_name, tag="latest"):
+  if ":" not in image_name:
+    image_name = f"{image_name}:{tag}"
   for c in ":.":
-    text = text.replace(c, "-")
-  return text
+    image_name = image_name.replace(c, "-")
+  return image_name
 
 if __name__ == "__main__":
     main()

@@ -12,4 +12,4 @@ RUN tar xjf gcc-arm-none-eabi.tar.bz2 -C /usr/share/ && \
 
 ENV GCC_ARM_ROOT=/usr/share/gcc-arm-none-eabi-${VERSION}
 
-RUN echo "PATH=${GCC_ARM_ROOT}/bin/:${PATH}" >> /etc/profile
+ENV PATH="${GCC_ARM_ROOT}/bin/:${PATH}"
