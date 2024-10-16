@@ -11,7 +11,10 @@ RUN apt-get update && \
         openocd \
         unzip \
         usbutils \
-        wget
+        wget \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # nrf5 sdk ====================================================================
 
@@ -27,6 +30,15 @@ RUN mkdir -p /opt/nordic && \
 RUN sed -i 's|^GNU_INSTALL_ROOT :=.*|GNU_INSTALL_ROOT := '"${GCC_ARM_ROOT}"'|' \
     "${SDK_ROOT}/components/toolchain/gcc/Makefile.posix"
 
+# micro-ecc library ===========================================================
+
+RUN cd ${SDK_ROOT}/external/micro-ecc && \
+    git clone https://github.com/kmackay/micro-ecc && \
+    cd micro-ecc && \
+    git checkout fe8ed90abc356347378eb25e2586e90df7be015a && \
+    cd ${SDK_ROOT}/external/micro-ecc/nrf51_armgcc/armgcc && make && \
+    cd ${SDK_ROOT}/external/micro-ecc/nrf52_armgcc/armgcc && make
+
 # nrf command line tools ======================================================
 
 ARG NRF_COMMAND_LINE_TOOLS_URL=https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-command-line-tools/sw/versions-10-x-x/10-24-2/nrf-command-line-tools_10.24.2_amd64.deb
@@ -34,7 +46,9 @@ ARG NRF_COMMAND_LINE_TOOLS_URL=https://nsscprodmedia.blob.core.windows.net/prod/
 RUN wget -O nrf_command_line_tools.deb ${NRF_COMMAND_LINE_TOOLS_URL} && \
     apt-get update && \
     dpkg -i nrf_command_line_tools.deb || apt-get install -f -y && \
-    rm nrf_command_line_tools.deb
+    rm nrf_command_line_tools.deb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # nrfutil =====================================================================
 
@@ -50,7 +64,5 @@ RUN mkdir -p ${NRFUTIL_HOME} && \
     chmod -R 777 ${NRFUTIL_HOME}
 
 # =============================================================================
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]
