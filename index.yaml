@@ -1,6 +1,7 @@
 images:
   # - doxygen
   # - freecad
+  - chipyard
   - gcc-arm-none-eabi
   # - gnuradio
   # - jupyter-octave
