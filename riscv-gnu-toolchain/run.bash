@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo docker run --rm -it \
--v $(pwd):/work \
---user $(id -u):$(id -g) \
-alencarfelipe/riscv-gnu-toolchain $@
+docker run --rm -it \
+    -v $(pwd):/work \
+    --user $(id -u):$(id -g) \
+    alencarfelipe/riscv-gnu-toolchain $@

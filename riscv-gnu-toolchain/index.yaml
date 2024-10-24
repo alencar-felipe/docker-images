@@ -1,0 +1,6 @@
+tags:
+  rv32imc-663b385:
+    COMMIT: 663b385
+    RISCV_ARCH: rv32imc
+
+latest: rv32imc-663b385

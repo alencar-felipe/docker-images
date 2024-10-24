@@ -6,23 +6,6 @@ name: build
   schedule:
   - cron: 0 0 1 * *
 jobs:
-  chipyard-latest:
-    name: chipyard-latest
-    runs-on: ubuntu-latest
-    env:
-      DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Set up Buildx
-      uses: docker/setup-buildx-action@v3
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: Build and push image
-      run: docker buildx build --push -t ${DOCKERHUB_USERNAME}/chipyard:latest chipyard
   gcc-arm-none-eabi-10-3-2021-10:
     name: gcc-arm-none-eabi-10-3-2021-10
     runs-on: ubuntu-latest
@@ -80,6 +63,25 @@ jobs:
       run: docker buildx build --push -t ${DOCKERHUB_USERNAME}/nrf5-dev:latest nrf5-dev
     needs:
     - gcc-arm-none-eabi-9-2019-q4-major
+  riscv-gnu-toolchain-rv32imc-663b385:
+    name: riscv-gnu-toolchain-rv32imc-663b385
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push image
+      run: docker buildx build --push -t ${DOCKERHUB_USERNAME}/riscv-gnu-toolchain:rv32imc-663b385
+        -t ${DOCKERHUB_USERNAME}/riscv-gnu-toolchain:latest --build-arg COMMIT="663b385"
+        --build-arg RISCV_ARCH="rv32imc" riscv-gnu-toolchain
   stm32-dev-latest:
     name: stm32-dev-latest
     runs-on: ubuntu-latest

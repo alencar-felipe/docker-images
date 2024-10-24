@@ -1,7 +1,6 @@
 images:
   # - doxygen
   # - freecad
-  - chipyard
   - gcc-arm-none-eabi
   # - gnuradio
   # - jupyter-octave
@@ -11,6 +10,6 @@ images:
   # - my-latex
   - nrf5-dev
   # - riscv-dev
-  # - riscv-gnu-toolchain
+  - riscv-gnu-toolchain
   - stm32-dev
   # - wine
