@@ -29,13 +29,14 @@ def build(
     tags: dict[str] = index.get("tags") or {"latest": []}
     build_args = tags.get(tag) or {}
 
-    full_tag = image_name
-    if tag:
-        full_tag = f"{full_tag}:{tag}"
-    if user:
-        full_tag = f"{user}/{full_tag}"
+    base = f"{user}/{image_name}" if user else image_name
+    full_tag = f"{base}:{tag}" if tag else base
+    # cache_tag = f"{base}:buildcache"
 
-    cmd = ["docker", "build", "-t", full_tag]
+    cmd = ["docker", "buildx", "build"]
+    cmd += ["-t", full_tag]
+    # cmd += [f"--cache-from=type=registry,ref={cache_tag}"]
+    # cmd += [f"--cache-to=type=registry,ref={cache_tag},mode=max"]
     for key, value in build_args.items():
         cmd += ["--build-arg", f"{key}={value}"]
 

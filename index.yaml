@@ -9,7 +9,7 @@ images:
   # - my-jupyter
   # - my-latex
   - nrf5-dev
-  # - riscv-dev
+  - riscv-dev
   - riscv-gnu-toolchain
   - stm32-dev
   # - wine

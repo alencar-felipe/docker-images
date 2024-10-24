@@ -1,0 +1,6 @@
+tags:
+  rv32imc:
+    RISCV_ARCH: rv32imc
+
+latest: rv32imc
+needs: ['riscv-gnu-toolchain:rv32imc-e65e7fc']
