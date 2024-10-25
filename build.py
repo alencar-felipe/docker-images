@@ -34,6 +34,7 @@ def build(
 
     user = user or DEFAULT_USER
     full_tag = f"{user}/{image_name}:{tag}"
+    cache_tag = f"{user}/{image_name}:cache-{tag}"
 
     cmd = ["docker", "buildx", "build"]
     if push:
@@ -43,9 +44,9 @@ def build(
     if latest != "latest" and latest == tag:
         cmd += ["-t", f"{user}/{image_name}:latest"]
 
-    cmd += [f"--cache-from=type=registry,ref={full_tag}"]
+    cmd += [f"--cache-from=type=registry,ref={cache_tag}"]
     if update_cache:
-        cmd += [f"--cache-to=type=registry,ref={full_tag},mode=max"]
+        cmd += [f"--cache-to=type=registry,ref={cache_tag},mode=max"]
 
     for key, value in build_args.items():
         cmd += ["--build-arg", f"{key}={value}"]

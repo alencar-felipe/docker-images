@@ -36,7 +36,7 @@ RUN git clone https://github.com/riscv-software-src/riscv-pk.git && \
     git checkout fafaedd2825054222ce2874bf4a90164b5b071d4 && \
     mkdir build/ && cd build/ && \
     ../configure --prefix=${RISCV} \
-        --host=riscv32-unknown-elf \
+        --host=riscv64-unknown-elf \
         --with-arch=${RISCV_ARCH} \
     && \
     make -j$(nproc) && \
