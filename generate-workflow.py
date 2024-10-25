@@ -4,6 +4,8 @@ import yaml
 
 ROOT_PATH = Path(__file__).parent
 
+USERNAME = "alencarfelipe"
+
 WORKFLOW_TEMPLATE = """
 name: build
 
@@ -20,9 +22,6 @@ name: build
 JOB_TEMPLATE = """
 name: {job_name}
 runs-on: ubuntu-latest
-env:
-  DOCKERHUB_USERNAME: ${{{{ vars.DOCKERHUB_USERNAME }}}}
-
 steps:
   - name: Checkout code
     uses: actions/checkout@v4
@@ -36,8 +35,15 @@ steps:
       username: ${{{{ vars.DOCKERHUB_USERNAME }}}}
       password: ${{{{ secrets.DOCKERHUB_PASSWORD }}}}
 
-  - name: Build and push image
-    run: docker buildx build --push {args}
+  - name: Build and push Docker image
+    uses: docker/build-push-action@v5
+    with:
+      push: true
+      cache-from: type=gha,scope=build-{job_name}
+      cache-to: type=gha,mode=max,scope=build-{job_name}
+      context: {context}
+      tags: {tags}
+      build-args: {build_args}
 
 """
 
@@ -81,14 +87,23 @@ def image_jobs(image_name: str) -> dict:
 
     job_name = get_job_name(image_name, tag)
 
-    args = f"-t ${{DOCKERHUB_USERNAME}}/{image_name}:{tag} "
-    if tag == latest:
-      args += f"-t ${{DOCKERHUB_USERNAME}}/{image_name}:latest "
-    for key, value in build_args.items():
-      args += f"--build-arg {key}=\"{value}\" "
-    args += f"{str(image_path.relative_to(ROOT_PATH))} "
+    context = str(image_path.relative_to(ROOT_PATH))
 
-    job = yaml.safe_load(JOB_TEMPLATE.format(job_name=job_name, args=args))
+    tags_list = [f"{USERNAME}/{image_name}:{tag}"]
+    if tag == latest:
+      tags_list += [f"{USERNAME}/{image_name}:latest"]
+    tags_str = ", ".join(tags_list)
+
+    build_args_str = (
+      '"' + '\\n'.join(f"{k}={v}" for k, v in build_args.items()) + '"'
+    )
+
+    job = yaml.safe_load(JOB_TEMPLATE.format(
+      job_name=job_name,
+      context=context,
+      tags=tags_str,
+      build_args=build_args_str
+    ))
 
     if needs:
       job["needs"] = [get_job_name(need) for need in needs]

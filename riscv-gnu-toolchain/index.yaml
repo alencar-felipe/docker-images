@@ -1,6 +1,6 @@
 tags:
-  rv32imc-663b385:
-    COMMIT: 663b385
-    RISCV_ARCH: rv32imc
+  rv32imc-e65e7fc:
+    COMMIT: e65e7fc
+    RISCV_ARCH: rv32imc_zicsr_zifencei
 
-latest: rv32imc-663b385
+latest: rv32imc-e65e7fc
