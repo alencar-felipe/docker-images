@@ -20,14 +20,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-gcc-arm-none-eabi-10-3-2021-10
-        cache-to: type=gha,mode=max,scope=build-gcc-arm-none-eabi-10-3-2021-10
-        context: gcc-arm-none-eabi
-        tags: alencarfelipe/gcc-arm-none-eabi:10.3-2021.10, alencarfelipe/gcc-arm-none-eabi:latest
-        build-args: VERSION=10.3-2021.10
+      run: ./build.py --push --update-cache alencarfelipe/gcc-arm-none-eabi:10.3-2021.10
   gcc-arm-none-eabi-9-2019-q4-major:
     name: gcc-arm-none-eabi-9-2019-q4-major
     runs-on: ubuntu-latest
@@ -42,16 +35,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-gcc-arm-none-eabi-9-2019-q4-major
-        cache-to: type=gha,mode=max,scope=build-gcc-arm-none-eabi-9-2019-q4-major
-        context: gcc-arm-none-eabi
-        tags: alencarfelipe/gcc-arm-none-eabi:9-2019-q4-major
-        build-args: 'VERSION=9-2019-q4-major
-
-          URL=https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2'
+      run: ./build.py --push --update-cache alencarfelipe/gcc-arm-none-eabi:9-2019-q4-major
   libgemmini-latest:
     name: libgemmini-latest
     runs-on: ubuntu-latest
@@ -66,14 +50,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-libgemmini-latest
-        cache-to: type=gha,mode=max,scope=build-libgemmini-latest
-        context: libgemmini
-        tags: alencarfelipe/libgemmini:latest
-        build-args: ''
+      run: ./build.py --push --update-cache alencarfelipe/libgemmini:latest
     needs:
     - riscv-dev-latest
   nrf5-dev-latest:
@@ -90,14 +67,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-nrf5-dev-latest
-        cache-to: type=gha,mode=max,scope=build-nrf5-dev-latest
-        context: nrf5-dev
-        tags: alencarfelipe/nrf5-dev:latest
-        build-args: ''
+      run: ./build.py --push --update-cache alencarfelipe/nrf5-dev:latest
     needs:
     - gcc-arm-none-eabi-9-2019-q4-major
   riscv-dev-latest:
@@ -114,14 +84,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-riscv-dev-latest
-        cache-to: type=gha,mode=max,scope=build-riscv-dev-latest
-        context: riscv-dev
-        tags: alencarfelipe/riscv-dev:latest
-        build-args: ''
+      run: ./build.py --push --update-cache alencarfelipe/riscv-dev:latest
     needs:
     - riscv-gnu-toolchain-e65e7fc
   riscv-gnu-toolchain-e65e7fc:
@@ -138,14 +101,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-riscv-gnu-toolchain-e65e7fc
-        cache-to: type=gha,mode=max,scope=build-riscv-gnu-toolchain-e65e7fc
-        context: riscv-gnu-toolchain
-        tags: alencarfelipe/riscv-gnu-toolchain:e65e7fc, alencarfelipe/riscv-gnu-toolchain:latest
-        build-args: VERSION=e65e7fc
+      run: ./build.py --push --update-cache alencarfelipe/riscv-gnu-toolchain:e65e7fc
   stm32-dev-latest:
     name: stm32-dev-latest
     runs-on: ubuntu-latest
@@ -160,13 +116,6 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        cache-from: type=gha,scope=build-stm32-dev-latest
-        cache-to: type=gha,mode=max,scope=build-stm32-dev-latest
-        context: stm32-dev
-        tags: alencarfelipe/stm32-dev:latest
-        build-args: ''
+      run: ./build.py --push --update-cache alencarfelipe/stm32-dev:latest
     needs:
     - gcc-arm-none-eabi-10-3-2021-10

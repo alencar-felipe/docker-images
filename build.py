@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
+import argparse
 from pathlib import Path
+from pprint import pprint
 from typing import Optional
 import yaml
 import subprocess
-import sys
 
+DEFAULT_USER = "alencarfelipe"
 ROOT_PATH = Path(__file__).parent
 
 def build(
-    image_name,
+    image_name: str,
     tag: Optional[str] = None,
-    user: Optional[str] = None
+    user: Optional[str] = None,
+    push: bool = True,
+    update_cache: bool = True
 ):
-    user = user or "alencarfelipe"
-
     image_path = ROOT_PATH / image_name
     index_path = image_path / "index.yaml"
 
@@ -25,26 +27,38 @@ def build(
         with open(index_path, "r") as file:
             index = yaml.safe_load(file)
 
-    tags: dict[str] = index.get("tags") or {"latest": []}
-    lastest = index.get("latest") or "latest"
-    tag = tag or lastest
+    latest = index.get("latest") or "latest"
+    tag = tag or latest
+    tags: dict[str, str] = index.get("tags") or {"latest": []}
     build_args = tags.get(tag) or {}
 
-    base = f"{user}/{image_name}" if user else image_name
-    full_tag = f"{base}:{tag}" if tag else base
-    # cache_tag = f"{base}:buildcache"
+    user = user or DEFAULT_USER
+    full_tag = f"{user}/{image_name}:{tag}"
 
     cmd = ["docker", "buildx", "build"]
+    if push:
+        cmd += ["--push"]
+
     cmd += ["-t", full_tag]
-    # cmd += [f"--cache-from=type=registry,ref={cache_tag}"]
-    # cmd += [f"--cache-to=type=registry,ref={cache_tag},mode=max"]
+    if latest != "latest" and latest == tag:
+        cmd += ["-t", f"{user}/{image_name}:latest"]
+
+    cmd += [f"--cache-from=type=registry,ref={full_tag}"]
+    if update_cache:
+        cmd += [f"--cache-to=type=registry,ref={full_tag},mode=max"]
+
     for key, value in build_args.items():
         cmd += ["--build-arg", f"{key}={value}"]
 
     cmd.append(str(image_path))
+
+    pprint(" ".join(cmd))
     subprocess.run(cmd, check=True)
 
 def parse_arg(text: str):
+    if Path(text).is_dir():
+        text = Path(text).name
+
     if "/" in text:
         user, remainder = text.split("/", 1)
     else:
@@ -60,8 +74,31 @@ def parse_arg(text: str):
     return image_name, tag, user
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: build_image.py [<user>/]<image_name>[:<tag>]")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Build Docker image with optional push and cache update."
+    )
+    parser.add_argument(
+        "image",
+        help="Image name in format [<user>/]<image_name>[:<tag>], or the path"
+    )
+    parser.add_argument(
+        "--push",
+        action="store_true",
+        help="Enable pushing to registry."
+    )
+    parser.add_argument(
+        "--update-cache",
+        action="store_true",
+        help="Enable cache update."
+    )
 
-    build(*parse_arg(sys.argv[1]))
+    args = parser.parse_args()
+    image_name, tag, user = parse_arg(args.image)
+
+    build(
+        image_name,
+        tag=tag,
+        user=user,
+        push=args.push,
+        update_cache=args.update_cache
+    )

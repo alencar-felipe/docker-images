@@ -36,14 +36,7 @@ steps:
       password: ${{{{ secrets.DOCKERHUB_PASSWORD }}}}
 
   - name: Build and push Docker image
-    uses: docker/build-push-action@v5
-    with:
-      push: true
-      cache-from: type=gha,scope=build-{job_name}
-      cache-to: type=gha,mode=max,scope=build-{job_name}
-      context: {context}
-      tags: {tags}
-      build-args: {build_args}
+    run: ./build.py --push --update-cache {full_tag}
 
 """
 
@@ -86,23 +79,11 @@ def image_jobs(image_name: str) -> dict:
   for tag, build_args in tags.items():
 
     job_name = get_job_name(image_name, tag)
-
-    context = str(image_path.relative_to(ROOT_PATH))
-
-    tags_list = [f"{USERNAME}/{image_name}:{tag}"]
-    if tag == latest:
-      tags_list += [f"{USERNAME}/{image_name}:latest"]
-    tags_str = ", ".join(tags_list)
-
-    build_args_str = (
-      '"' + '\\n'.join(f"{k}={v}" for k, v in build_args.items()) + '"'
-    )
+    full_tag = f"{USERNAME}/{image_name}:{tag}"
 
     job = yaml.safe_load(JOB_TEMPLATE.format(
       job_name=job_name,
-      context=context,
-      tags=tags_str,
-      build_args=build_args_str
+      full_tag=full_tag
     ))
 
     if needs:
