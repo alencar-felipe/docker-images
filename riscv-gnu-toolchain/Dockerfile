@@ -24,8 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/riscv/riscv-gnu-toolchain /riscv-gnu-toolchain && \
-    cd /riscv-gnu-toolchain
+RUN git clone https://github.com/riscv/riscv-gnu-toolchain
 
 WORKDIR /riscv-gnu-toolchain
 
@@ -33,17 +32,13 @@ ARG VERSION="e65e7fc"
 
 RUN git checkout $VERSION
 
-ARG RISCV_ARCH="rv32imc_zicsr_zifencei"
-ARG RISCV_ABI="ilp32"
-ARG RISCV_CMODEL="medlow"
+ENV RISCV="/opt/riscv"
+ENV PATH="${RISCV}/bin:${PATH}"
 
-RUN ./configure --prefix=/opt/riscv \
+RUN ./configure --prefix=${RISCV} \
     --enable-debug-info=yes \
+    --enable-multilib \
     --disable-linux \
-    --disable-multilib \
-    --with-arch=${RISCV_ARCH} \
-    --with-abi=${RISCV_ABI} \
-    --with-cmodel=${RISCV_CMODEL} \
     && \
     make -j$(nproc)
 
@@ -58,7 +53,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /opt/riscv /opt/riscv
-
 ENV RISCV="/opt/riscv"
 ENV PATH="${RISCV}/bin:${PATH}"
+
+COPY --from=builder ${RISCV} ${RISCV}

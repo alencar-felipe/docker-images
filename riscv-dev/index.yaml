@@ -1,6 +1,1 @@
-tags:
-  rv32imc:
-    RISCV_ARCH: rv32imc_zicsr_zifencei
-
-latest: rv32imc
-needs: ['riscv-gnu-toolchain:rv32imc-e65e7fc']
+needs: ['riscv-gnu-toolchain:e65e7fc']

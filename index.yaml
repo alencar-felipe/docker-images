@@ -4,6 +4,7 @@ images:
   - gcc-arm-none-eabi
   # - gnuradio
   # - jupyter-octave
+  - libgemmini
   # - mea-cia3
   # - mea-project-s8
   # - my-jupyter

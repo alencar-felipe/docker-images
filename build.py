@@ -28,7 +28,6 @@ def build(
     tags: dict[str] = index.get("tags") or {"latest": []}
     lastest = index.get("latest") or "latest"
     tag = tag or lastest
-
     build_args = tags.get(tag) or {}
 
     base = f"{user}/{image_name}" if user else image_name
