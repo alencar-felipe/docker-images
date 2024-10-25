@@ -97,7 +97,7 @@ jobs:
         cache-to: type=gha,mode=max,scope=build-riscv-dev-rv32imc
         context: riscv-dev
         tags: alencarfelipe/riscv-dev:rv32imc, alencarfelipe/riscv-dev:latest
-        build-args: RISCV_ARCH=rv32imc
+        build-args: RISCV_ARCH=rv32imc_zicsr_zifencei
     needs:
     - riscv-gnu-toolchain-rv32imc-e65e7fc
   riscv-gnu-toolchain-rv32imc-e65e7fc:

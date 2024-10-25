@@ -12,7 +12,6 @@ def build(
     tag: Optional[str] = None,
     user: Optional[str] = None
 ):
-    tag = tag or "latest"
     user = user or "alencarfelipe"
 
     image_path = ROOT_PATH / image_name
@@ -27,6 +26,9 @@ def build(
             index = yaml.safe_load(file)
 
     tags: dict[str] = index.get("tags") or {"latest": []}
+    lastest = index.get("latest") or "latest"
+    tag = tag or lastest
+
     build_args = tags.get(tag) or {}
 
     base = f"{user}/{image_name}" if user else image_name

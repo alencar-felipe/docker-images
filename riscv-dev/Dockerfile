@@ -5,15 +5,22 @@ FROM ${BASE_IMAGE} AS builder
 ARG RISCV_ARCH="rv32imc_zicsr_zifencei"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        autoconf \
-        automake \
-        build-essential \
-        ca-certificates \
-        device-tree-compiler \
-        git \
-    && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    autoconf \
+    automake \
+    build-essential \
+    ca-certificates \
+    device-tree-compiler \
+    git \
+    libftdi1-dev \
+    libgpiod-dev \
+    libtool \
+    libusb-1.0.0-dev \
+    libftdi1-dev \
+    pkg-config \
+    texinfo \
+&& \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/riscv/riscv-isa-sim.git && \
     cd riscv-isa-sim && \
@@ -48,6 +55,12 @@ RUN git clone https://github.com/riscv/riscv-openocd.git && \
 
 FROM ${BASE_IMAGE}
 
-COPY --from=builder /opt/riscv /opt/riscv
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libusb-1.0-0 \
+        libftdi1 \
+        libgpiod2 \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/opt/riscv/bin:${PATH}"
+COPY --from=builder ${RISCV} ${RISCV}

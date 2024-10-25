@@ -38,8 +38,8 @@ ARG RISCV_ABI="ilp32"
 ARG RISCV_CMODEL="medlow"
 
 RUN ./configure --prefix=/opt/riscv \
+    --enable-debug-info=yes \
     --disable-linux \
-    --disable-gdb \
     --disable-multilib \
     --with-arch=${RISCV_ARCH} \
     --with-abi=${RISCV_ABI} \
@@ -49,6 +49,16 @@ RUN ./configure --prefix=/opt/riscv \
 
 FROM $BASE_IMAGE
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgmp10 \
+        libmpc3 \
+        libmpfr6 \
+        zlib1g \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /opt/riscv /opt/riscv
 
-ENV PATH="/opt/riscv/bin:${PATH}"
+ENV RISCV="/opt/riscv"
+ENV PATH="${RISCV}/bin:${PATH}"
