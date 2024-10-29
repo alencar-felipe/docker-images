@@ -36,9 +36,10 @@ ENV RISCV="/opt/riscv"
 ENV PATH="${RISCV}/bin:${PATH}"
 
 RUN ./configure --prefix=${RISCV} \
-    --enable-debug-info=yes \
-    --enable-multilib \
-    --disable-linux \
+        --enable-debug-info=yes \
+        --enable-multilib \
+        --disable-linux \
+        --with-cmodel=medany \
     && \
     make -j$(nproc)
 
