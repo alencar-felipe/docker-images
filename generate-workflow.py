@@ -36,7 +36,7 @@ steps:
       password: ${{{{ secrets.DOCKERHUB_PASSWORD }}}}
 
   - name: Build and push Docker image
-    run: ./build.py --push --update-cache {full_tag}
+    run: ./build.py --push --push-cache {full_tag}
 
 """
 

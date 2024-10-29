@@ -2,9 +2,9 @@ images:
   # - doxygen
   # - freecad
   - gcc-arm-none-eabi
+  - gemmini-dev
   # - gnuradio
   # - jupyter-octave
-  - libgemmini
   # - mea-cia3
   # - mea-project-s8
   # - my-jupyter

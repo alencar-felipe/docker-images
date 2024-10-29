@@ -14,7 +14,7 @@ def build(
     tag: Optional[str] = None,
     user: Optional[str] = None,
     push: bool = True,
-    update_cache: bool = True
+    push_cache: bool = True
 ):
     image_path = ROOT_PATH / image_name
     index_path = image_path / "index.yaml"
@@ -45,7 +45,7 @@ def build(
         cmd += ["-t", f"{user}/{image_name}:latest"]
 
     cmd += [f"--cache-from=type=registry,ref={cache_tag}"]
-    if update_cache:
+    if push_cache:
         cmd += [f"--cache-to=type=registry,ref={cache_tag},mode=max"]
 
     for key, value in build_args.items():
@@ -88,9 +88,9 @@ if __name__ == "__main__":
         help="Enable pushing to registry."
     )
     parser.add_argument(
-        "--update-cache",
+        "--push-cache",
         action="store_true",
-        help="Enable cache update."
+        help="Enable cache push."
     )
 
     args = parser.parse_args()
@@ -101,5 +101,5 @@ if __name__ == "__main__":
         tag=tag,
         user=user,
         push=args.push,
-        update_cache=args.update_cache
+        push_cache=args.push_cache
     )

@@ -1,0 +1,25 @@
+From 57ebe1831fe6a4c9134fff3233f79ebaf918fa77 Mon Sep 17 00:00:00 2001
+From: alencar-felipe <alencar.felipe.paiva@gmail.com>
+Date: Tue, 29 Oct 2024 09:23:40 +0100
+Subject: [PATCH] multilib fix
+
+---
+ Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 78dc947..34fd01e 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -130,7 +130,7 @@ endef
+ define libgloss_multilib
+ $(eval arch := $(patsubst %/,%,$(dir $(1))))
+ $(eval abi := $(notdir $(1)))
+-$(call libgloss,$(1),_$(arch)_$(abi),-march=$(arch) -mabi=$(abi))
++$(call libgloss,$(1),_$(arch)_$(abi),-march=$(arch)_zicsr_zifencei -mabi=$(abi))
+ endef
+
+ $(eval $(call libgloss))
+--
+2.30.2
+
